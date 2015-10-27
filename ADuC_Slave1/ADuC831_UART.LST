@@ -1,0 +1,26 @@
+C51 COMPILER V9.54   ADUC831_UART                                                          10/27/2015 00:44:13 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE ADUC831_UART
+OBJECT MODULE PLACED IN ADuC831_UART.OBJ
+COMPILER INVOKED BY: F:\Apps\Keil_v5\C51\BIN\C51.EXE ADuC831_UART.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "ADuC831_UART.h"
+   2          
+   3          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

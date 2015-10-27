@@ -1,0 +1,4 @@
+"main.obj",
+"DAC.obj" 
+TO "pro_usart" 
+RAMSIZE(256) 

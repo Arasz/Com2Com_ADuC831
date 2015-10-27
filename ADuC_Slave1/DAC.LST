@@ -1,0 +1,58 @@
+C51 COMPILER V9.54   DAC                                                                   10/27/2015 06:26:51 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE DAC
+OBJECT MODULE PLACED IN DAC.OBJ
+COMPILER INVOKED BY: F:\Apps\Keil_v5\C51\BIN\C51.EXE DAC.c OPTIMIZE(9,SIZE) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "DAC.h"
+   2          
+   3          /// \brief Inicjalizuje DACx.
+   4          ///
+   5          /// DAC zostaje uruchomiony w trybie 12 bitowym, w zakresie napiec wyjsciowych od 0-VDD i z wylaczona sync
+             -hronizacja.
+   6          /// \params [in] nrDAC Numer DAC ktory zostanie zainicjalizowany.
+   7          /// \returns Wartosc pusta.
+   8          void DAC_Init(uchar nrDAC)
+   9          {
+  10   1        DACx_POWER_ON(nrDAC); // Uruchom DACx.
+  11   1        DACx_MODE_12BIT; // Ustaw oba DAC w tryb 12 bitowy
+  12   1        DACx_RANGE_VDD(nrDAC); // Zakres napiec wyjsciowych dla DACx to 0-VDD
+  13   1        DACx_OUTPUT_NORM(nrDAC); // Wlacz wyjscie dla DACx;
+  14   1      }
+  15          
+  16          /// \brief Ustawia napiecie wyjsciowe dla okreslonego DAC.
+  17          ///
+  18          /// Funkcja wylacza synchronizacje, ustawia odpowiednia wartosc po czym wlacza synchronizacje.
+  19          /// \params [in] nrDAC Numer DAC ktory zostanie zainicjalizowany.
+  20          /// \params [in] voltage Napiecie wejsciowe.
+  21          /// \returns Wartosc pusta.
+  22          void DAC_SetVoltage(uchar nrDAC, float voltage)
+  23          {
+  24   1        DACx_SYNC_OFF; // Wylacz synchronizacje dla obu DAC.
+  25   1        
+  26   1        if(nrDAC == DAC0)
+  27   1          SET_DACx_REG_VAL(0,voltage);
+  28   1        else
+  29   1          SET_DACx_REG_VAL(1,voltage);
+  30   1        
+  31   1        DACx_SYNC_ON; // Wlacz synchrronizacje dla obu DAC.
+  32   1      }
+  33          
+  34          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    117    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

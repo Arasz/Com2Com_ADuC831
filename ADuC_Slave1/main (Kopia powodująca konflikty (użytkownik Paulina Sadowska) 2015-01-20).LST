@@ -1,0 +1,150 @@
+C51 COMPILER V9.53.0.0   MAIN                                                              01/20/2015 20:33:28 PAGE 1   
+
+
+C51 COMPILER V9.53.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "ADuC831.h"
+   2          #include "ADuC831_STD.h"
+   3          
+   4          #define UART_8BIT_VAR_BAUD 0x1
+   5          #define SET_UART_MODE(mode) do{ SM1 = 0x1&mode; SM0 = 0x2&mode;}while(0) 
+   6          #define BAUD_RATE 9600
+   7          #define TIM3_BAUD_ENABLE (T3CON |= (1<<7))
+   8          #define DIV 0x5 ///< Wartosc liczona z zaleznosci DIV = ln(fcore/32*baud)/ln(2)), zaokroaglona w dol
+   9          #define T3FD_VAL 0x8///< Wartosc liczona z zaleznosci T3FD = (2*fcore)/((2^DIV)*baud)-64, zaokroaglona do 
+             -najblizeszej wartosci calkowitej
+  10          #define SET_REQUIRED_BAUD do{ T3CON |= DIV; T3FD = T3FD_VAL;  }while(0)
+  11          #define BUFFER_SIZE 8
+  12          
+  13          //uchar echo = 0;
+  14          char  receivedChar = 0;
+  15          uchar READ_READY = 0; ///< Flaga gotowosci do odczytu
+  16          
+  17          uchar txBuffer[BUFFER_SIZE];
+  18          uchar rxBuffer[BUFFER_SIZE];
+  19          
+  20          void UART_Interrupt_Handler(void) interrupt 4
+  21          {
+  22   1        if(RI == SET_FLAG)
+  23   1        {
+  24   2          if(rxBuffer[0]< BUFFER_SIZE) // Sprawdz czy jest miejsce w buforze
+  25   2          {
+  26   3            //EA = INTERRUPT_DISABLE:
+  27   3            rxBuffer[rxBuffer[0]] = SBUF; // Przypisz odebrany bajt do wolnego bajtu w buforze
+  28   3            rxBuffer[0] ++; // Zwieksz licznik buffora
+  29   3            RI = CLEAR_FLAG; // Wyczysc flage przerwania
+  30   3            //EA = INTERRUPT_ENABLE:
+  31   3          }
+  32   2          else
+  33   2          {
+  34   3            READ_READY = SET_FLAG; // Dane gotowe do odczytu
+  35   3            RI = CLEAR_FLAG;
+  36   3          }
+  37   2        }
+  38   1        if(TI == SET_FLAG)
+  39   1        {
+  40   2          if(txBuffer[0]>0)
+  41   2          {
+  42   3            SBUF = txBuffer[BUFFER_SIZE-txBuffer[0]];
+  43   3            txBuffer[0]--;
+  44   3            TI = CLEAR_FLAG;
+  45   3          }
+  46   2          else
+  47   2          {
+  48   3            TI = CLEAR_FLAG;
+  49   3          }
+  50   2        }
+  51   1      }
+  52          
+  53          /// \brief Funkcja inicjalizujaca UART
+  54          void UART_Init(void)
+C51 COMPILER V9.53.0.0   MAIN                                                              01/20/2015 20:33:28 PAGE 2   
+
+  55          {
+  56   1        rxBuffer[0] = 1;
+  57   1        txBuffer[0] = 0;
+  58   1        
+  59   1        SET_UART_MODE(UART_8BIT_VAR_BAUD);
+  60   1        REN = SET_BIT; // Uruchom odbieranie danych
+  61   1        EA = INTERRUPT_ENABLE;  // Zgoda globalna na przerwanie
+  62   1        ES = INTERRUPT_ENABLE; // Zgoda na przerwanie od portu szeregowego
+  63   1        // Generowanie BAUDRATE - TIM3
+  64   1        TIM3_BAUD_ENABLE;
+  65   1        SET_REQUIRED_BAUD;
+  66   1      }
+  67          
+  68          /// \brief WysyBa znak przez UART
+  69          /// 
+  70          /// \param [in] c Znak do wyslania
+  71          /// \return Wartosc pusta
+  72          void UART_SendChar(char c)
+  73          {
+  74   1        SBUF = c;
+  75   1      }
+  76          
+  77          void UART_SendData(char* buffer, char length)
+  78          {
+  79   1        
+  80   1      }
+*** WARNING C280 IN LINE 77 OF main.c: 'buffer': unreferenced local variable
+*** WARNING C280 IN LINE 77 OF main.c: 'length': unreferenced local variable
+  81          
+  82          uchar UART_ReceiveData(char* buffer)
+  83          {
+  84   1        int i;
+  85   1        for(i = 1;i<BUFFER_SIZE;i++)
+  86   1        {
+  87   2            buffer[i] = rxBuffer[i];
+  88   2        }
+  89   1        rxBuffer[0] = 1; // Reset licznika
+  90   1        READ_READY = CLEAR_FLAG;
+  91   1        return SET_FLAG;
+  92   1      }
+  93          
+  94          void main(void)
+  95          {
+  96   1        uchar READY_TO_WORK = 0;
+  97   1        uchar secondBuffer[BUFFER_SIZE]; // Drugi buffer danych, zeby pierwszy mogl nadal odbierac dane
+  98   1        int q;
+  99   1        UART_Init();
+ 100   1        
+ 101   1        while(1)
+ 102   1        {
+ 103   2          if(READ_READY)
+ 104   2          {
+ 105   3            READY_TO_WORK = UART_ReceiveData(secondBuffer);
+ 106   3          }
+ 107   2          if(READY_TO_WORK)
+ 108   2          {
+ 109   3            ES = INTERRUPT_DISABLE;
+ 110   3            for(q = 2; q< BUFFER_SIZE;q++)
+ 111   3            {
+ 112   4              txBuffer[q] = secondBuffer[q];
+ 113   4            }
+ 114   3            txBuffer[0] = BUFFER_SIZE-1;
+C51 COMPILER V9.53.0.0   MAIN                                                              01/20/2015 20:33:28 PAGE 3   
+
+ 115   3            READY_TO_WORK = CLEAR_FLAG;
+ 116   3            ES = INTERRUPT_ENABLE;
+ 117   3            SBUF = secondBuffer[1];
+ 118   3          }
+ 119   2        }
+ 120   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    220    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     18      15
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

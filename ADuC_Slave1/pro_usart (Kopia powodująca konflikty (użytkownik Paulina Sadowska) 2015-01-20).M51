@@ -1,0 +1,223 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        01/20/2015  20:33:28  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE main.obj TO pro_usart RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  main.obj (MAIN)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CSTOPTR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  pro_usart (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0012H     UNIT         ?DT?MAIN
+            DATA    001AH     000BH     UNIT         _DATA_GROUP_
+            DATA    0025H     0004H     UNIT         ?DT?_UART_SENDDATA?MAIN
+            IDATA   0029H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0020H                  *** GAP ***
+            CODE    0023H     0003H     ABSOLUTE     
+                    0026H     07DAH                  *** GAP ***
+            CODE    0800H     008CH     UNIT         ?C_C51STARTUP
+            CODE    088CH     0048H     UNIT         ?PR?UART_INTERRUPT_HANDLER?MAIN
+            CODE    08D4H     003EH     UNIT         ?PR?MAIN?MAIN
+            CODE    0912H     0030H     UNIT         ?PR?_UART_RECEIVEDATA?MAIN
+            CODE    0942H     0022H     UNIT         ?C?LIB_CODE
+            CODE    0964H     001AH     UNIT         ?PR?UART_INIT?MAIN
+            CODE    097EH     0009H     UNIT         ?PR?_UART_SENDDATA?MAIN
+            CODE    0987H     0007H     UNIT         ?C_INITSEG
+            CODE    098EH     0003H     UNIT         ?PR?_UART_SENDCHAR?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   pro_usart (MAIN)
+
+
+SEGMENT                                   DATA_GROUP 
+  +--> CALLED SEGMENT                   START    LENGTH
+-------------------------------------------------------
+?C_C51STARTUP                           -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                           001AH    0008H
+  +--> ?PR?UART_INIT?MAIN
+  +--> ?PR?_UART_RECEIVEDATA?MAIN
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/20/2015  20:33:28  PAGE 2
+
+
+?PR?_UART_RECEIVEDATA?MAIN              0022H    0003H
+
+
+
+SYMBOL TABLE OF MODULE:  pro_usart (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  B:00A8H.7       PUBLIC        EA
+  D:009DH         PUBLIC        T3FD
+  C:088CH         PUBLIC        UART_Interrupt_Handler
+  B:00A8H.4       PUBLIC        ES
+  B:0098H.0       PUBLIC        RI
+  B:0098H.1       PUBLIC        TI
+  D:00E8H         PUBLIC        I2CCON
+  D:00E8H         PUBLIC        DCON
+  C:08D4H         PUBLIC        main
+  C:097EH         PUBLIC        _UART_SendData
+  C:098EH         PUBLIC        _UART_SendChar
+  D:0099H         PUBLIC        SBUF
+  C:0964H         PUBLIC        UART_Init
+  D:0008H         PUBLIC        rxBuffer
+  D:0010H         PUBLIC        txBuffer
+  D:0018H         PUBLIC        receivedChar
+  B:0098H.7       PUBLIC        SM0
+  B:0098H.6       PUBLIC        SM1
+  C:0912H         PUBLIC        _UART_ReceiveData
+  B:0098H.4       PUBLIC        REN
+  D:009EH         PUBLIC        T3CON
+  D:0019H         PUBLIC        READ_READY
+  -------         PROC          UART_INTERRUPT_HANDLER
+  C:088CH         LINE#         20
+  C:0895H         LINE#         22
+  C:0898H         LINE#         23
+  C:0898H         LINE#         24
+  C:089FH         LINE#         25
+  C:089FH         LINE#         27
+  C:08A6H         LINE#         28
+  C:08A8H         LINE#         29
+  C:08AAH         LINE#         31
+  C:08ACH         LINE#         33
+  C:08ACH         LINE#         34
+  C:08AFH         LINE#         35
+  C:08B1H         LINE#         36
+  C:08B1H         LINE#         37
+  C:08B1H         LINE#         38
+  C:08B4H         LINE#         39
+  C:08B4H         LINE#         40
+  C:08BBH         LINE#         41
+  C:08BBH         LINE#         42
+  C:08C5H         LINE#         43
+  C:08C7H         LINE#         44
+  C:08C9H         LINE#         45
+  C:08CBH         LINE#         47
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/20/2015  20:33:28  PAGE 3
+
+
+  C:08CBH         LINE#         48
+  C:08CDH         LINE#         49
+  C:08CDH         LINE#         50
+  C:08CDH         LINE#         51
+  -------         ENDPROC       UART_INTERRUPT_HANDLER
+  -------         PROC          UART_INIT
+  C:0964H         LINE#         54
+  C:0964H         LINE#         55
+  C:0964H         LINE#         56
+  C:0967H         LINE#         57
+  C:096AH         LINE#         59
+  C:096EH         LINE#         60
+  C:0970H         LINE#         61
+  C:0972H         LINE#         62
+  C:0974H         LINE#         64
+  C:0977H         LINE#         65
+  C:097DH         LINE#         66
+  -------         ENDPROC       UART_INIT
+  -------         PROC          _UART_SENDCHAR
+  D:0007H         SYMBOL        c
+  C:098EH         LINE#         72
+  C:098EH         LINE#         73
+  C:098EH         LINE#         74
+  C:0990H         LINE#         75
+  -------         ENDPROC       _UART_SENDCHAR
+  -------         PROC          _UART_SENDDATA
+  D:0025H         SYMBOL        buffer
+  D:0028H         SYMBOL        length
+  C:097EH         LINE#         77
+  C:0986H         LINE#         78
+  C:0986H         LINE#         80
+  -------         ENDPROC       _UART_SENDDATA
+  -------         PROC          _UART_RECEIVEDATA
+  D:0022H         SYMBOL        buffer
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:0912H         LINE#         82
+  C:0918H         LINE#         83
+  C:0918H         LINE#         85
+  C:091CH         LINE#         86
+  C:091CH         LINE#         87
+  C:092EH         LINE#         88
+  C:0939H         LINE#         89
+  C:093CH         LINE#         90
+  C:093FH         LINE#         91
+  C:0941H         LINE#         92
+  -------         ENDPROC       _UART_RECEIVEDATA
+  -------         PROC          MAIN
+  -------         DO            
+  D:0007H         SYMBOL        READY_TO_WORK
+  D:001AH         SYMBOL        secondBuffer
+  D:0004H         SYMBOL        q
+  -------         ENDDO         
+  C:08D4H         LINE#         94
+  C:08D4H         LINE#         95
+  C:08D4H         LINE#         96
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/20/2015  20:33:28  PAGE 4
+
+
+  C:08D6H         LINE#         99
+  C:08D9H         LINE#         101
+  C:08D9H         LINE#         102
+  C:08D9H         LINE#         103
+  C:08DDH         LINE#         104
+  C:08DDH         LINE#         105
+  C:08E6H         LINE#         106
+  C:08E6H         LINE#         107
+  C:08E9H         LINE#         108
+  C:08E9H         LINE#         109
+  C:08EBH         LINE#         110
+  C:08EFH         LINE#         111
+  C:08EFH         LINE#         112
+  C:08FBH         LINE#         113
+  C:0906H         LINE#         114
+  C:0909H         LINE#         115
+  C:090BH         LINE#         116
+  C:090DH         LINE#         117
+  C:0910H         LINE#         118
+  C:0910H         LINE#         119
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        ?C?CSTOPTR
+  C:0942H         PUBLIC        ?C?CSTOPTR
+  -------         ENDMOD        ?C?CSTOPTR
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_SENDCHAR?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_SENDDATA?MAIN
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00E5H BYTE (11%) *
+******************************************************************************
+
+Program Size: data=42.0 xdata=0 code=407
+LINK/LOCATE RUN COMPLETE.  2 WARNING(S),  0 ERROR(S)
